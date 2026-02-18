@@ -1,50 +1,69 @@
-# SSHipIt
+<h1 align="center">🚀 SSHipIt</h1>
+<p align="center">
+  <b>Self-hosted CI/CD over SSH for Node.js, Next.js, and React apps.</b><br/>
+  Built for developers who want production control without sharing server access.
+</p>
 
-Self-hosted CI/CD over SSH for Node.js, Next.js, and React projects.
+<p align="center">
+  <a href="https://github.com/radhakishan404/sshipit/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/radhakishan404/sshipit?style=for-the-badge&logo=github"></a>
+  <a href="https://github.com/radhakishan404/sshipit/network/members"><img alt="GitHub forks" src="https://img.shields.io/github/forks/radhakishan404/sshipit?style=for-the-badge&logo=github"></a>
+  <a href="https://github.com/radhakishan404/sshipit/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/radhakishan404/sshipit?style=for-the-badge&logo=github"></a>
+  <a href="https://github.com/radhakishan404/sshipit/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/radhakishan404/sshipit?style=for-the-badge"></a>
+</p>
 
-No GitHub Actions required. No "who has root access?" in team chat. No more terminal acrobatics.
+<p align="center">
+  <img alt="Last commit" src="https://img.shields.io/github/last-commit/radhakishan404/sshipit?style=flat-square">
+  <img alt="Repo size" src="https://img.shields.io/github/repo-size/radhakishan404/sshipit?style=flat-square">
+  <img alt="Node.js" src="https://img.shields.io/badge/Node.js-18%2B-339933?style=flat-square&logo=node.js&logoColor=white">
+  <img alt="Self-hosted" src="https://img.shields.io/badge/Self--Hosted-Yes-0ea5e9?style=flat-square">
+  <img alt="SSH Powered" src="https://img.shields.io/badge/SSH-Powered-10b981?style=flat-square">
+  <img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square">
+</p>
 
-## Name ideas (if you want alternatives)
+---
 
-- `SSHipIt` (recommended)
-- `PushPilot`
-- `DeployDost`
-- `ShipStack`
-- `ProdPush`
+## 😅 Why I Built This
 
-This repo is prepared with `SSHipIt` branding.
+I was doing deployments like this:
 
-## Why this exists
+`ssh -> git pull -> npm install -> build -> migrate -> pm2 restart -> repeat`
 
-I used to deploy like this:
+Across multiple servers. Every day.
 
-1. SSH into server
-2. pull code
-3. run install
-4. run build
-5. run migration
-6. restart PM2
-7. pray
+So I built **SSHipIt**:
+- No GitHub Actions dependency
+- No sharing production server with third-party CI
+- No one-env-key-at-a-time UI pain
+- Just clean, local-first, SSH-native deployments
 
-Repeat this for every project.
+If this saves your time, star it and share it.
 
-So I built SSHipIt to make deployments boring, repeatable, and safe.
+## ✨ What It Does
 
-## What SSHipIt does
+- 📦 Project management for Node.js, Next.js, React
+- 🖥️ Reusable SSH servers across projects
+- 🔐 Encrypted server credentials (AES-256-GCM at rest)
+- ⚙️ Smart stack defaults (install/build/start/restart)
+- 🌱 Bulk `.env` editing for production
+- 🚚 Manual deploy + one-click redeploy
+- 📜 Live log streaming over WebSocket
+- 🧭 Deployment history with filtering + cancel/delete
+- 🧱 Release folders + `current` symlink strategy
+- 🧪 Migration support (Prisma / Sequelize / Knex / TypeORM)
 
-- Project CRUD for Node.js, Next.js, React
-- Reusable SSH servers across multiple projects
-- Encrypted server secrets at rest (AES-256-GCM)
-- Bulk `.env` management (because one-key-at-a-time is pain)
-- Manual production deploy from UI
-- Live streaming deploy logs
-- Deployment history with status filters
-- Redeploy / cancel / delete deployment records
-- Smart stack defaults for commands
-- Migration support (Prisma/Sequelize/Knex/TypeORM)
-- Release directories + `current` symlink flow
+## 🧠 Architecture
 
-## Quick start
+```mermaid
+flowchart LR
+    UI["SSHipIt UI (Browser)"] --> API["Node.js API + WebSocket"]
+    API --> DB["SQLite (projects, env, servers, deployments)"]
+    API --> RUNNER["Deploy Runner"]
+    RUNNER --> LOCAL["Local workspace deploy"]
+    RUNNER --> SSH["Remote deploy over SSH"]
+    SSH --> TARGET["Server (repo, releases, current, pm2)"]
+```
+
+## ⚡ Quick Start (60 seconds)
 
 ```bash
 git clone https://github.com/radhakishan404/sshipit.git
@@ -54,28 +73,39 @@ cp .env.example .env
 npm start
 ```
 
-Open `http://localhost:3000` (or your configured `PORT`).
+Open: `http://localhost:3000`
 
-Required env vars:
+Required `.env` keys:
 - `PORT`
 - `DATABASE_PATH`
 - `WORKSPACE_ROOT`
 - `KEEP_RELEASES`
-- `ENCRYPTION_KEY` (set a strong random value)
+- `ENCRYPTION_KEY` (set a long random value in production)
 
-## Manual deployment flow
+## 🛠️ First Deployment
 
-1. Create project
-2. Pick framework and apply smart defaults
+1. Create a project
+2. Select framework and click smart defaults
 3. Paste production env in bulk
-4. Add/attach SSH server
-5. Test SSH connection
+4. Add or attach an SSH server
+5. Test connection
 6. Select target server
 7. Click `Deploy Now`
-8. Watch logs and go drink water
+8. Follow live logs
 
-## API endpoints (high level)
+## 🧩 Default Stack Behavior
 
+| Stack | Install | Build | Restart |
+|---|---|---|---|
+| Node.js | `npm ci \|\| npm install` | optional | PM2 restart/start fallback |
+| Next.js | `npm ci \|\| npm install` | `npm run build` | PM2 restart/start fallback |
+| React | `npm ci \|\| npm install` | `npm run build` | usually nginx reload |
+
+You can override all commands per project.
+
+## 🔌 API + WebSocket
+
+Core APIs:
 - `GET /api/projects`
 - `POST /api/projects`
 - `PUT /api/projects/:id`
@@ -89,63 +119,60 @@ Required env vars:
 - `POST /api/deployments/:id/cancel`
 - `DELETE /api/deployments/:id`
 
-WebSocket: `ws://localhost:3000/ws`
+WebSocket:
+- `ws://localhost:3000/ws`
 
-## Open source launch checklist
+## 📚 Dependency Map
 
-When you create your GitHub repo:
+| Dependency | Use |
+|---|---|
+| `express` | HTTP API |
+| `ws` | Live logs/events over WebSocket |
+| `better-sqlite3` | Local metadata DB |
+| `ssh2` | SSH execution and remote deploy |
+| `dotenv` | Runtime env loading |
+| `zod` | Request validation |
+| `uuid` | IDs |
+| `cors`, `morgan` | API support + logs |
 
-1. Create repo (example): `radhakishan404/sshipit`
-2. Push this code
-3. Set repo description:
-   - `Self-hosted CI/CD over SSH for Node.js, Next.js and React apps`
-4. Add topics:
-   - `cicd`, `self-hosted`, `ssh`, `deployment`, `nodejs`, `nextjs`, `react`
-5. Add project screenshot in README
-6. Pin repo on your profile
-7. Post launch thread with a short story + demo gif
-
-If you choose a different repo name than `sshipit`, update:
-- `package.json` (`name`, `repository`, `homepage`, `bugs`)
-- README clone URL
-
-## Roadmap (future improvements)
-
-PRs are welcome for all of these:
+## 🗺️ Roadmap (PRs Welcome)
 
 - Git webhook auto-deploy (GitHub/GitLab/Bitbucket)
-- Build/test pipeline gates
+- Build/test quality gates
 - Health-check gate before success
-- One-click rollback in UI
-- Blue/green and canary strategies
-- Better zero-downtime helpers
+- One-click rollback
+- Blue/green and canary rollout options
 - Secret backends (Vault, SSM)
-- Slack/Discord/Email notifications
+- Slack/Discord/email notifications
 - Multi-user auth + RBAC
-- Audit export and reporting
-- Docker and Compose deploy mode
-- Kubernetes adapter
-- Better deployment analytics
+- Docker/Compose mode
+- Kubernetes target adapter
+- Deployment analytics dashboard
 
-If you want to build any item from this roadmap, open a PR directly.
+If you want to build one, open a PR.
 
-## Contributing
+## 📣 Want Users? Read This
 
-See `/CONTRIBUTING.md`.
+A practical growth plan is here:
+- [`DISCOVERABILITY_PLAN.md`](./DISCOVERABILITY_PLAN.md)
 
-Issues:
-- Bugs: use bug template
-- Ideas: use feature template
+It includes:
+- launch-week checklist
+- where to post
+- post templates (X/LinkedIn/Reddit/dev.to)
+- repeatable content strategy for stars + users
 
-PRs:
-- Keep changes focused
-- Add logs/screenshots for deploy/UI changes
-- Explain why this change is needed
+## 🤝 Contributing
 
-## Security
+- Read [`CONTRIBUTING.md`](./CONTRIBUTING.md)
+- Use issue templates in `.github/ISSUE_TEMPLATE`
+- Keep PRs focused and include logs/screenshots for deploy/UI changes
 
-See `/SECURITY.md` for responsible disclosure.
+## 🔐 Security
 
-## License
+Please read [`SECURITY.md`](./SECURITY.md) for responsible disclosure.
 
-MIT - see `/LICENSE`.
+## 📄 License
+
+MIT - see [`LICENSE`](./LICENSE).
+
