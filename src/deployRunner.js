@@ -375,18 +375,14 @@ class DeployRunner {
     return hasReloadOrRestart && hasFallbackStart;
   }
 
-  #buildPm2RebindPrelude(appName) {
+  #buildPm2ReleaseRebindPrelude(appName) {
     const quotedName = quote(appName);
-    const quotedAppName = quote(appName);
 
     return `
       if command -v pm2 >/dev/null 2>&1; then
         if pm2 describe ${quotedName} >/dev/null 2>&1; then
-          PM2_CWD="$(APP_NAME=${quotedAppName} pm2 jlist | node -e 'const fs=require("fs"); const app=process.env.APP_NAME || ""; const list=JSON.parse(fs.readFileSync(0, "utf8")); const item=list.find((it)=>it && it.name===app); process.stdout.write((item && item.pm2_env && item.pm2_env.pm_cwd) ? String(item.pm2_env.pm_cwd) : "");' 2>/dev/null || true)"
-          if [ -n "$PM2_CWD" ] && [ "$PM2_CWD" != "$PWD" ]; then
-            echo "PM2 process ${appName} is bound to old cwd: $PM2_CWD. Rebinding to $PWD."
-            pm2 delete ${quotedName} >/dev/null 2>&1 || true
-          fi
+          echo "Release-based deploy: rebinding PM2 process ${appName} to $PWD."
+          pm2 delete ${quotedName} >/dev/null 2>&1 || true
         fi
       fi
     `;
@@ -422,7 +418,9 @@ class DeployRunner {
       return normalizedRestartCommand;
     }
 
-    const prelude = this.#buildPm2RebindPrelude(appName);
+    // For release-based deploys, PM2 can keep old resolved cwd from previous release.
+    // Force delete + fallback start to guarantee process is started from the new current path.
+    const prelude = this.#buildPm2ReleaseRebindPrelude(appName);
     return `${prelude}\n${normalizedRestartCommand}`;
   }
 
