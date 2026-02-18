@@ -1,7 +1,7 @@
 <h1 align="center">🚀 SSHipIt</h1>
 <p align="center">
   <b>Self-hosted CI/CD over SSH for Node.js, Next.js, and React apps.</b><br/>
-  Built for developers who want production control without sharing server access.
+  Built for developers by developer who want production control without sharing server access.
 </p>
 
 <p align="center">
