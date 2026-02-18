@@ -8,10 +8,12 @@
   <a href="https://github.com/radhakishan404/sshipit/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/radhakishan404/sshipit?style=for-the-badge&logo=github"></a>
   <a href="https://github.com/radhakishan404/sshipit/network/members"><img alt="GitHub forks" src="https://img.shields.io/github/forks/radhakishan404/sshipit?style=for-the-badge&logo=github"></a>
   <a href="https://github.com/radhakishan404/sshipit/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/radhakishan404/sshipit?style=for-the-badge&logo=github"></a>
+  <a href="https://github.com/radhakishan404/sshipit/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/radhakishan404/sshipit/ci.yml?style=for-the-badge&label=CI"></a>
   <a href="https://github.com/radhakishan404/sshipit/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/radhakishan404/sshipit?style=for-the-badge"></a>
 </p>
 
 <p align="center">
+  <img alt="Latest release" src="https://img.shields.io/github/v/release/radhakishan404/sshipit?style=flat-square">
   <img alt="Last commit" src="https://img.shields.io/github/last-commit/radhakishan404/sshipit?style=flat-square">
   <img alt="Repo size" src="https://img.shields.io/github/repo-size/radhakishan404/sshipit?style=flat-square">
   <img alt="Node.js" src="https://img.shields.io/badge/Node.js-18%2B-339933?style=flat-square&logo=node.js&logoColor=white">
@@ -176,3 +178,18 @@ Please read [`SECURITY.md`](./SECURITY.md) for responsible disclosure.
 
 MIT - see [`LICENSE`](./LICENSE).
 
+## 🧭 Maintainer Setup (GitHub UI)
+
+To complete project hygiene, set these in the repo settings:
+
+- Description:
+  - `Self-hosted CI/CD over SSH for Node.js, Next.js, and React apps`
+- Website:
+  - `https://github.com/radhakishan404/sshipit#readme`
+- Topics:
+  - `cicd`, `self-hosted`, `ssh`, `deployment`, `nodejs`, `nextjs`, `react`, `devops`
+- Enable:
+  - Discussions
+  - Issues
+  - Wikis (optional)
+  - Security advisories
