@@ -4,7 +4,9 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "node src/server.js"
+    "dev": "node src/server.js",
+    "seed:demo": "node scripts/seedDemoData.js",
+    "seed:demo:append": "node scripts/seedDemoData.js --append"
   },
   "keywords": [
     "cicd",

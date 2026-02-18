@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SSHipIt | Deploy Over SSH</title>
+    <meta name="description" content="SSHipIt is a self-hosted CI/CD tool for Node.js, Next.js, and React apps. Deploy over SSH with live logs, release history, and reusable servers." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <a class="logo" href="#top" aria-label="SSHipIt home">
+        <span class="logo-mark">&gt;_</span>
+        <span>SSHipIt</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#screenshots">Screenshots</a>
+        <a href="#demo">Demo Data</a>
+      </nav>
+      <a class="btn btn-primary" href="https://github.com/radhakishan404/sshipit" target="_blank" rel="noreferrer">Star on GitHub</a>
+    </header>
+
+    <main>
+      <section class="hero" id="top">
+        <p class="eyebrow">Self-hosted CI/CD for JavaScript teams</p>
+        <h1>Deploy over SSH.<br />Own your pipeline.</h1>
+        <p class="subtext">
+          SSHipIt gives you project-level deployments, reusable servers, release history,
+          env management, and live logs without vendor lock-in.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="https://github.com/radhakishan404/sshipit" target="_blank" rel="noreferrer">Get SSHipIt</a>
+          <a class="btn btn-ghost" href="#screenshots">View UI</a>
+        </div>
+        <div class="hero-shot-wrap">
+          <img src="./assets/screenshots/overview.png" alt="SSHipIt dashboard overview" class="hero-shot" />
+        </div>
+      </section>
+
+      <section class="features" id="features">
+        <h2>Built for real deployment workflows</h2>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <h3>Reusable SSH Servers</h3>
+            <p>Attach one server to multiple projects and manage defaults per project.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Release-based Deploys</h3>
+            <p>Timestamped releases + <code>current</code> symlink strategy for cleaner rollouts.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Live Logs + History</h3>
+            <p>Track every deployment with status filters, durations, and instant log copy.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Bulk Env Editing</h3>
+            <p>Edit full production <code>.env</code> in one shot. No key-by-key pain.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="screenshots" id="screenshots">
+        <div class="section-head">
+          <h2>Real product screenshots</h2>
+          <p>No fake AI mockups. This is SSHipIt running with demo records.</p>
+        </div>
+        <div class="shot-grid">
+          <figure class="shot-card large">
+            <img src="./assets/screenshots/overview.png" alt="Overview of projects and deployment panels" />
+            <figcaption>Project overview + env + server management</figcaption>
+          </figure>
+          <figure class="shot-card">
+            <img src="./assets/screenshots/history.png" alt="Deployment history list" />
+            <figcaption>Deployment history with status labels</figcaption>
+          </figure>
+          <figure class="shot-card">
+            <img src="./assets/screenshots/logs.png" alt="Live logs section" />
+            <figcaption>Live deployment logs</figcaption>
+          </figure>
+          <figure class="shot-card">
+            <img src="./assets/screenshots/servers.png" alt="Server management section" />
+            <figcaption>Reusable SSH server configuration</figcaption>
+          </figure>
+          <figure class="shot-card">
+            <img src="./assets/screenshots/envs.png" alt="Environment variable management" />
+            <figcaption>Bulk environment variable editing</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="demo" id="demo">
+        <h2>Need clean screenshots in 10 seconds?</h2>
+        <p>Seed screenshot-safe mock records locally (no real project or server data exposed):</p>
+        <pre><code>npm run seed:demo</code></pre>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Built by <a href="https://github.com/radhakishan404" target="_blank" rel="noreferrer">@radhakishan404</a></p>
+      <p><a href="https://github.com/radhakishan404/sshipit" target="_blank" rel="noreferrer">GitHub Repo</a></p>
+    </footer>
+  </body>
+</html>
