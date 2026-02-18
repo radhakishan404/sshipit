@@ -1,0 +1,40 @@
+{
+  "name": "sshipit",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js"
+  },
+  "keywords": [
+    "cicd",
+    "deploy",
+    "ssh",
+    "nodejs",
+    "nextjs",
+    "react",
+    "self-hosted"
+  ],
+  "author": "Radhakishan Jangid",
+  "license": "MIT",
+  "description": "Self-hosted CI/CD over SSH for Node.js, Next.js and React apps.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/radhakishan404/sshipit.git"
+  },
+  "homepage": "https://github.com/radhakishan404/sshipit#readme",
+  "bugs": {
+    "url": "https://github.com/radhakishan404/sshipit/issues"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.6.2",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "morgan": "^1.10.1",
+    "ssh2": "^1.17.0",
+    "uuid": "^13.0.0",
+    "ws": "^8.19.0",
+    "zod": "^4.3.6"
+  }
+}

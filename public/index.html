@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SSHipIt</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="page-bg"></div>
+    <header class="topbar">
+      <div>
+        <h1>SSHipIt</h1>
+        <p>Self-hosted CI/CD for Node.js, Next.js and React projects</p>
+      </div>
+      <div class="topbar-right">
+        <div class="chip" id="queueChip">Queue: 0 | Running: 0</div>
+        <button class="btn btn-primary" id="newProjectBtn">+ New Project</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel" id="projectsPanel">
+        <div class="panel-title-row">
+          <h2>Projects</h2>
+          <button class="btn btn-ghost" id="refreshProjectsBtn">Refresh</button>
+        </div>
+        <div id="projectsList" class="stack"></div>
+      </section>
+
+      <section class="panel" id="detailsPanel">
+        <div id="emptyState" class="empty">
+          <h3>Select a project</h3>
+          <p>Choose any project on the left to manage env, servers, deployments and logs.</p>
+        </div>
+
+        <div id="projectDetails" class="hidden">
+          <div class="panel-title-row">
+            <div>
+              <h2 id="projectName"></h2>
+              <p id="projectMeta"></p>
+            </div>
+            <div class="actions-row">
+              <label class="inline-select">
+                Target Server
+                <select id="deployServerSelect">
+                  <option value="">Use default server (or local if none)</option>
+                </select>
+              </label>
+              <button class="btn btn-secondary" id="editProjectBtn">Edit</button>
+              <button class="btn btn-danger" id="deleteProjectBtn">Delete</button>
+              <button class="btn btn-primary" id="deployBtn">Deploy Now</button>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <article class="subpanel">
+              <div class="panel-title-row">
+                <h3>Environment Variables (Production)</h3>
+                <div class="actions-row env-toolbar">
+                  <span class="chip small-chip" id="envCountBadge">0 keys</span>
+                  <button class="btn btn-ghost btn-small" id="toggleEnvExpandBtn" type="button">See All</button>
+                  <button class="btn btn-ghost btn-small" id="toggleEnvBulkBtn" type="button">Edit .env</button>
+                </div>
+              </div>
+              <div id="envBulkSection" class="hidden">
+                <textarea id="envBulkInput" rows="7" placeholder="NODE_ENV=production&#10;PORT=3001&#10;DATABASE_URL=mysql://user:pass@host:3306/db"></textarea>
+                <div class="actions-row">
+                  <button class="btn btn-primary btn-small" id="importEnvBtn" type="button">Apply Changes</button>
+                  <button class="btn btn-ghost btn-small" id="cancelEnvBulkBtn" type="button">Close</button>
+                </div>
+                <p class="muted small">Paste full `.env` content. Existing keys are upserted.</p>
+              </div>
+              <div id="envList" class="stack compact"></div>
+            </article>
+
+            <article class="subpanel">
+              <div class="panel-title-row">
+                <h3>SSH Target Servers</h3>
+                <div class="actions-row">
+                  <select id="attachServerSelect" class="mini-select">
+                    <option value="">Attach existing server...</option>
+                  </select>
+                  <button class="btn btn-ghost btn-small" id="attachServerBtn" type="button">Attach</button>
+                  <button class="btn btn-ghost btn-small" id="addServerBtn" type="button">+ Add Server</button>
+                </div>
+              </div>
+              <div id="serverFormWrap" class="hidden">
+                <form id="serverForm" class="stack compact">
+                  <div class="form-grid compact-grid">
+                    <label>
+                      Server Name
+                      <input id="sName" type="text" placeholder="agarwal-plesk" required />
+                    </label>
+                    <label>
+                      Host / IP
+                      <input id="sHost" type="text" placeholder="103.50.161.127" required />
+                    </label>
+                    <label>
+                      Port
+                      <input id="sPort" type="number" value="22" min="1" max="65535" required />
+                    </label>
+                    <label>
+                      Username
+                      <input id="sUser" type="text" placeholder="root" required />
+                    </label>
+                    <label>
+                      Auth Type
+                      <select id="sAuthType">
+                        <option value="password">Password</option>
+                        <option value="key">Private Key</option>
+                      </select>
+                    </label>
+                    <label>
+                      Default
+                      <select id="sDefault">
+                        <option value="false">No</option>
+                        <option value="true">Yes</option>
+                      </select>
+                    </label>
+                  </div>
+                  <div id="serverPasswordRow">
+                    <label>
+                      SSH Password
+                      <input id="sPassword" type="password" placeholder="For edit: leave empty to keep unchanged" />
+                    </label>
+                  </div>
+                  <div id="serverKeyRow" class="hidden">
+                    <label>
+                      Private Key
+                      <textarea id="sPrivateKey" rows="4" placeholder="For edit: leave empty to keep existing key"></textarea>
+                    </label>
+                    <label>
+                      Key Passphrase (optional)
+                      <input id="sPassphrase" type="password" placeholder="Optional" />
+                    </label>
+                  </div>
+                  <p id="serverFormHint" class="muted small"></p>
+                  <div class="actions-row">
+                    <button class="btn btn-primary" id="serverSubmitBtn" type="submit">Save Server</button>
+                    <button class="btn btn-ghost btn-small" id="cancelServerEditBtn" type="button">Cancel</button>
+                  </div>
+                </form>
+              </div>
+              <div id="serverList" class="stack compact"></div>
+              <div class="actions-row">
+                <button class="btn btn-ghost btn-small hidden" id="showServerFormBtn" type="button">Add your first server</button>
+              </div>
+            </article>
+          </div>
+
+          <article class="subpanel">
+            <div class="panel-title-row deployment-history-head">
+              <h3>Deployment History</h3>
+              <div id="deploymentHistoryMeta" class="actions-row"></div>
+            </div>
+            <div id="deploymentHistoryFilters" class="actions-row deployment-filters"></div>
+            <div id="deploymentsList" class="stack compact"></div>
+            <div id="deploymentHistoryMoreRow" class="actions-row deployment-more-row hidden">
+              <button class="btn btn-ghost btn-small" id="deploymentsShowMoreBtn" type="button">Show more</button>
+            </div>
+          </article>
+
+          <article class="subpanel">
+            <div class="panel-title-row">
+              <h3>Live Logs</h3>
+              <div class="actions-row">
+                <button class="btn btn-ghost" id="copyLogBtn">Copy Logs</button>
+                <button class="btn btn-ghost" id="clearLogBtn">Clear</button>
+                <span id="copyLogStatus" class="muted small hidden"></span>
+                <span id="activeLogLabel" class="muted">No deployment selected</span>
+              </div>
+            </div>
+            <pre id="logsViewer" class="logs">Select a deployment to view logs...</pre>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="projectDialog">
+      <form id="projectForm" class="dialog-body" method="dialog">
+        <div class="panel-title-row">
+          <h3 id="projectDialogTitle">New Project</h3>
+          <button type="button" class="btn btn-ghost" id="closeDialogBtn">Close</button>
+        </div>
+
+        <div class="form-grid">
+          <label>
+            Project Name
+            <input type="text" id="pName" required />
+          </label>
+          <label>
+            Repo URL
+            <input type="text" id="pRepo" placeholder="https://github.com/user/repo.git" required />
+          </label>
+          <label>
+            Branch
+            <input type="text" id="pBranch" value="main" required />
+          </label>
+          <label>
+            Framework
+            <select id="pFramework">
+              <option value="node">Node.js</option>
+              <option value="nextjs">Next.js</option>
+              <option value="react">React</option>
+            </select>
+          </label>
+          <label>
+            Package Manager
+            <select id="pPackageManager">
+              <option value="npm">npm</option>
+              <option value="pnpm">pnpm</option>
+              <option value="yarn">yarn</option>
+              <option value="bun">bun</option>
+            </select>
+          </label>
+          <label>
+            Migration Tool
+            <select id="pMigrationTool">
+              <option value="none">None</option>
+              <option value="prisma">Prisma</option>
+              <option value="sequelize">Sequelize</option>
+              <option value="knex">Knex</option>
+              <option value="typeorm">TypeORM</option>
+              <option value="custom">Custom</option>
+            </select>
+          </label>
+          <label>
+            Migration Command (optional)
+            <input type="text" id="pMigration" placeholder="npx prisma generate && npx prisma migrate deploy" />
+          </label>
+          <label>
+            Install Command (optional)
+            <input type="text" id="pInstall" placeholder="npm ci || npm install" />
+          </label>
+          <label>
+            Build Command (optional)
+            <input type="text" id="pBuild" placeholder="npm run build" />
+          </label>
+          <label>
+            Start Command
+            <input type="text" id="pStart" placeholder="npm start" />
+          </label>
+          <label>
+            Restart Command
+            <input type="text" id="pRestart" placeholder="pm2 restart app || pm2 start npm --name app -- start" />
+          </label>
+          <label>
+            Output Directory
+            <input type="text" id="pOutput" placeholder="dist / build / .next" />
+          </label>
+          <label>
+            Deploy Path (target path on server)
+            <input type="text" id="pDeployPath" placeholder="/var/www/my-app" />
+          </label>
+        </div>
+
+        <div class="actions-row">
+          <button type="button" class="btn btn-ghost btn-small" id="applySmartDefaultsBtn">Apply Smart Defaults</button>
+        </div>
+
+        <p id="stackGuide" class="guide-text"></p>
+
+        <label>
+          Initial Production .env (optional)
+          <textarea id="pEnv" rows="8" placeholder="NODE_ENV=production&#10;PORT=3001&#10;DATABASE_URL=mysql://user:pass@host:3306/db"></textarea>
+        </label>
+        <p class="muted small">Applied as bulk env import on save. Keys are upserted (existing keys are updated).</p>
+
+        <div class="actions-row">
+          <button class="btn btn-primary" type="submit" id="projectSubmitBtn">Save Project</button>
+        </div>
+      </form>
+    </dialog>
+
+    <template id="projectCardTemplate">
+      <article class="project-card">
+        <div>
+          <h4 class="project-name"></h4>
+          <p class="project-line"></p>
+          <p class="project-line muted small"></p>
+        </div>
+        <div class="actions-row">
+          <span class="status-chip"></span>
+          <button class="btn btn-ghost btn-small select-btn">Open</button>
+        </div>
+      </article>
+    </template>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>
